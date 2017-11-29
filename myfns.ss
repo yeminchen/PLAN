@@ -1,4 +1,7 @@
-#lang racket
+;Project 4 Yemin Chen
+;11:30 a.m. section
+
+;this function calls eval-prog function to evaluate each (prog ...)
 (define (myinterpreter x)
    (cond
       ((null? x) x)
@@ -6,9 +9,11 @@
    )
 )
 
+;used for evaluate prog
 (define (eval-prog x)
   (cond
     ((null? x) x)
+    ;when it calls eval-expr, it also passes binding list, which is empty at the first of each prog
     (#t (eval-expr (cdr x) '(())))
    )
 )
@@ -35,23 +40,27 @@
    )
 )
 
-
+;function for evaluate myadd
 (define (eval-myadd x binding)
     (+ (eval-expr (cons (car x) '()) binding) (eval-expr (cdr x) binding))
 
 )
 
+;function for evaluate mymul
 (define (eval-mymul x binding)
     (* (eval-expr (cons (car x) '()) binding) (eval-expr (cdr x) binding))
 
 )
 
+;function for evaluate myneg
 (define (eval-myneg x binding)
   (* (eval-expr (cons (car x) '()) binding) -1)
 
 )
 
+;function for evaluate mylet
 (define (eval-mylet x binding)
+  ;update binding list
   (let ([binding
          (cons (cons (car x) (cons (eval-expr (car (cdr x)) binding) '())) binding)
          ])
@@ -60,6 +69,7 @@
 
 )
 
+;when eval-expr read a symbol, it will use this function to search for its binding value.
 (define (search-binding x binding)
   (cond
     ((null? binding) -100)
